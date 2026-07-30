@@ -1,6 +1,6 @@
 # yaml-language-server: $schema=./quartz/plugins/quartz-plugins.schema.json
 configuration:
-  pageTitle: 王俊博 · RL 研究笔记
+  pageTitle: 学习笔记与博客
   pageTitleSuffix: ""
   enableSPA: true
   enablePopovers: true
