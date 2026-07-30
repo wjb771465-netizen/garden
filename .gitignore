@@ -1,0 +1,6 @@
+node_modules/
+.quartz-cache/
+public/
+*.pptx
+*.docx
+.DS_Store
