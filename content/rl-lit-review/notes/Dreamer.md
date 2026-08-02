@@ -1,9 +1,10 @@
 ---
-
-## title: "Dreamer 原理解析笔记"
+title: "Dreamer 原理解析笔记"
 tags: [rl, world-model, dreamer, mbrl]
 date: 2026-08-01
 draft: false
+zotero: "zotero://select/library/items/HTPSYNDQ"
+---
 
 # Dreamer 原理解析笔记
 
