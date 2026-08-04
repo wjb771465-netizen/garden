@@ -1,0 +1,112 @@
+{
+  "providers": [
+    "codecogs",
+    "quicklatex",
+    "mathpad",
+    "wikimedia"
+  ],
+  "items": [
+    {
+      "id": "formula_rssm",
+      "latex": "\\begin{aligned}\\text{Sequence model:} &\\quad h_t = f_\\phi(h_{t-1}, z_{t-1}, a_{t-1}) \\\\ \\text{Encoder:} &\\quad z_t \\sim q_\\phi(z_t \\mid h_t, x_t) \\\\ \\text{Dynamics:} &\\quad \\hat{z}_t \\sim p_\\phi(\\hat{z}_t \\mid h_t) \\\\ \\text{Reward:} &\\quad \\hat{r}_t \\sim p_\\phi(\\hat{r}_t \\mid h_t, z_t) \\\\ \\text{Discount:} &\\quad \\hat{\\gamma}_t \\sim p_\\phi(\\hat{\\gamma}_t \\mid h_t, z_t) \\\\ \\text{Decoder:} &\\quad \\hat{x}_t \\sim p_\\phi(\\hat{x}_t \\mid h_t, z_t)\\end{aligned}",
+      "display": "block",
+      "color": "#000000",
+      "background": "#FFFFFF",
+      "transparent": true,
+      "dpi": 300,
+      "filename": "formula_rssm.png",
+      "file": "images/formula_rssm.png",
+      "providers": [
+        "codecogs",
+        "quicklatex",
+        "mathpad",
+        "wikimedia"
+      ],
+      "transparent_tolerance": 12,
+      "provider": "codecogs",
+      "status": "Rendered",
+      "pixel_width": 889,
+      "pixel_height": 415,
+      "ratio": 2.1422
+    },
+    {
+      "id": "formula_v3",
+      "latex": "L(\\phi)=\\beta_{\\mathrm{pred}}\\mathcal{L}_{\\mathrm{pred}}+\\beta_{\\mathrm{dyn}}\\mathcal{L}_{\\mathrm{dyn}}+\\beta_{\\mathrm{rep}}\\mathcal{L}_{\\mathrm{rep}}",
+      "display": "block",
+      "color": "#000000",
+      "background": "#FFFFFF",
+      "transparent": true,
+      "dpi": 300,
+      "filename": "formula_v3.png",
+      "file": "images/formula_v3.png",
+      "providers": [
+        "codecogs",
+        "quicklatex",
+        "mathpad",
+        "wikimedia"
+      ],
+      "transparent_tolerance": 12,
+      "provider": "codecogs",
+      "status": "Rendered",
+      "pixel_width": 830,
+      "pixel_height": 52,
+      "ratio": 15.9615
+    },
+    {
+      "id": "formula_lambda",
+      "latex": "V_{\\lambda}(s_{\\tau})=\\hat{r}_{\\tau}+\\gamma\\big[(1-\\lambda)v_{\\psi}(s_{\\tau+1})+\\lambda V_{\\lambda}(s_{\\tau+1})\\big]",
+      "display": "block",
+      "color": "#000000",
+      "background": "#FFFFFF",
+      "transparent": true,
+      "dpi": 300,
+      "filename": "formula_lambda.png",
+      "file": "images/formula_lambda.png",
+      "providers": [
+        "codecogs",
+        "quicklatex",
+        "mathpad",
+        "wikimedia"
+      ],
+      "transparent_tolerance": 12,
+      "provider": "codecogs",
+      "status": "Rendered",
+      "pixel_width": 957,
+      "pixel_height": 60,
+      "ratio": 15.95
+    },
+    {
+      "id": "formula_ac",
+      "latex": "\\min_{\\psi}\\|v_{\\psi}-V_{\\lambda}\\|^2,\\quad \\max_{\\phi}\\sum_{\\tau}V_{\\lambda}(s_{\\tau})",
+      "display": "block",
+      "color": "#000000",
+      "background": "#FFFFFF",
+      "transparent": true,
+      "dpi": 300,
+      "filename": "formula_ac.png",
+      "file": "images/formula_ac.png",
+      "providers": [
+        "codecogs",
+        "quicklatex",
+        "mathpad",
+        "wikimedia"
+      ],
+      "transparent_tolerance": 12,
+      "provider": "codecogs",
+      "status": "Rendered",
+      "pixel_width": 700,
+      "pixel_height": 104,
+      "ratio": 6.7308
+    }
+  ],
+  "renderer": {
+    "providers": [
+      "codecogs",
+      "quicklatex",
+      "mathpad",
+      "wikimedia"
+    ],
+    "default_dpi": 300,
+    "output_dir": "images"
+  }
+}
