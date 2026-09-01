@@ -163,6 +163,8 @@ $$
 
 ## 4. 策略优化与推理
 
+本节 $s_t$ 即 RSSM 模型状态 $\{h_t,z_t\}$：$h_t$（确定性）压缩历史，$z_t$（随机）建模不确定。
+
 动力学已知且可微时，行为学习在潜空间**想象**中完成，与世界模型训练交替进行——无需在真实环境逐步试错更新策略。
 
 ### 4.1 想象轨迹
@@ -258,3 +260,54 @@ $$
 超参（原文）：$S$ seed episodes，$C$ collect interval，$B$ batch size，$L$ sequence length，$H$ imagination horizon，$\alpha$ learning rate。
 
 三块交替：**学动力学（真实数据）→ 在潜空间想象里学行为 → 与环境交互补数据**。
+
+---
+
+## 6. DreamerV3 的拓展：符号尺度鲁棒
+
+V1/V2 用标量回归拟合奖励/价值，在量级悬殊（$\pm 1$ 到上千）或稀疏奖励下易爆梯度/退化。V3 三项设计让单组超参跨域稳定。
+
+### 6.1 symlog 压缩量级
+
+$$
+\mathrm{symlog}(x)\doteq \mathrm{sign}(x)\ln(|x|+1),\qquad
+\mathrm{symexp}(x)\doteq \mathrm{sign}(x)\bigl(e^{|x|}-1\bigr)
+$$
+
+奖励、价值目标先 `symlog` 再回归，解码/读出用 `symexp` 反转。近零处近似恒等（保小值精度），远离零时把大数值对数压缩，避免目标无界导致的梯度爆炸。V3 的观测解码（连续输入）也走这条。
+
+### 6.2 two-hot + unimix：类别式标量预测
+
+价值/奖励头不再回归标量，而是在固定 bins 上输出**类别分布**：
+
+$$
+B\doteq \mathrm{symexp}\bigl([-20,\ldots,+20]\bigr),\qquad
+\hat y\doteq \mathrm{softmax}\bigl(f(x)\bigr)^{\!\top} B
+$$
+
+- 目标 $y$ 转 `two-hot`：只保留最相邻两个 bin（$k,k+1$）非零、线性插值且和为 $1$。
+- 损失为类别交叉熵 $\mathcal{L}\doteq -\mathrm{twohot}(y)^{\!\top}\log\mathrm{softmax}(f(x))$——**只依赖 bin 概率、不依赖连续值**，对离群/极端奖励天然鲁棒。
+- latent categorical（`encoder` 与 `dynamics predictor` 的 $z_t$）混入 **1% uniform + 99% 网络输出**（unimix），使分布不可能确定性化，KL 不尖峰、不发散。
+
+### 6.3 熵与奖励量级的再平衡
+
+Actor 目标（$\eta=3\times10^{-4}$）：
+
+$$
+\mathcal{L}(\theta)\doteq
+-\sum_{t=1}^{T}
+\mathrm{sg}\!\left(\frac{R^{\lambda}_t-v_\psi(s_t)}{\max(1,S)}\right)
+\log \pi_\theta(a_t\mid s_t)
++\eta\,H\bigl[\pi_\theta(\cdot\mid s_t)\bigr]
+$$
+
+$$
+S\doteq \mathrm{EMA}\bigl(\mathrm{Per}(R^{\lambda}_t,95)-\mathrm{Per}(R^{\lambda}_t,5),\ 0.99\bigr)
+$$
+
+要点：
+
+- 归一化的是**优势** $R^{\lambda}_t-v_\psi(s_t)$，不是收益本身。
+- 分母取 $\max(1,S)$：只在回报量级大时缩小梯度，量级小时（稀疏奖励时段间 $\approx$ 常数）**原样传导**、保留信号；「按标准差归一化」在稀疏奖励下会失效。
+- $S$ 用 5–95 分位差的 EMA 平滑，避免单点异常抖动。
+- 于是固定 $\eta$ 在不同量级任务上一致约束**探索熵与利用回报**的权衡，不必随奖励尺度调参。
