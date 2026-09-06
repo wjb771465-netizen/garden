@@ -4,3 +4,5 @@ public/
 *.pptx
 *.docx
 .DS_Store
+content/rl-lit-review/.agents/
+content/rl-lit-review/.claude/
